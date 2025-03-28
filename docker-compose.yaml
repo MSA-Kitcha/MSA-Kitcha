@@ -1,29 +1,30 @@
 services:
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    container_name: mysql
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - /sys/fs/cgroup
-    networks:
-      - kitcha_network
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "-u", "${MYSQL_USER}","-p${MYSQL_PASSWORD}", "ping", "-h", "localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    ports:
-      - "3308:3306"
-    restart: on-failure
+#  mysql:
+#    image: mysql:8.0
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_DATABASE: ${MYSQL_DATABASE}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#    container_name: mysql
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+#      - /sys/fs/cgroup
+#    networks:
+#      - kitcha_network
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "-u", "${MYSQL_USER}","-p${MYSQL_PASSWORD}", "ping", "-h", "localhost" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 3
+#    ports:
+#      - "3308:3306"
+#    restart: on-failure
 
   config-server:
     image: 99koo/config
     build:
+#      context: ./Kitcha-BE
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
       dockerfile: Config-server/Dockerfile
     container_name: config-server
@@ -34,16 +35,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    ports:
+      - "8071:8071"
     expose:
       - "8071"
-    depends_on:
-      mysql:
-        condition: service_started
+#    depends_on:
+#      mysql:
+#        condition: service_started
     restart: on-failure
 
   eureka:
     image: 99koo/eureka
     build:
+#      context: ./Kitcha-BE
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
       dockerfile: eureka/Dockerfile
     container_name: eureka
@@ -64,6 +68,7 @@ services:
   gateway-server:
     image: 99koo/gateway
     build:
+#      context: ./Kitcha-BE
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
       dockerfile: API-Gateway/Dockerfile
     environment:
@@ -87,9 +92,10 @@ services:
   auth:
     image: 99koo/auth
     build:
+#      context: ./Kitcha-Authentication
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-Authentication.git
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE: ${MYSQL_USER_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TOKEN_SECRET: ${TOKEN_SECRET}
@@ -107,8 +113,8 @@ services:
     expose:
       - "8091"
     depends_on:
-      mysql:
-        condition: service_healthy
+#      mysql:
+#        condition: service_healthy
       eureka:
         condition: service_healthy
       gateway-server:
@@ -118,6 +124,7 @@ services:
   article:
     image: 99koo/article
     build:
+#      context: ./Kitcha-Article
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-Article.git
     environment:
       NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
@@ -129,8 +136,8 @@ services:
     expose:
       - "8080"
     depends_on:
-      mysql:
-        condition: service_healthy
+#      mysql:
+#        condition: service_healthy
       eureka:
         condition: service_healthy
       gateway-server:
@@ -140,9 +147,10 @@ services:
   board:
     image: 99koo/board
     build:
+#      context: ./Kitcha-Board
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-Board.git
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_DATABASE: ${MYSQL_BOARD_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     container_name: board
@@ -151,8 +159,8 @@ services:
     expose:
       - "8080"
     depends_on:
-      mysql:
-        condition: service_healthy
+#      mysql:
+#        condition: service_healthy
       eureka:
         condition: service_healthy
       gateway-server:
@@ -162,6 +170,7 @@ services:
   frontend:
     image: 99koo/frontend
     build:
+#      context: ./Kitcha-FE
       context: https://github.com/MSA-Kitcha/MSA-Kitcha-FE.git
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL}
