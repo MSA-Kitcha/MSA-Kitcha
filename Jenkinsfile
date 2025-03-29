@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build & Push Config') {
             steps {
-                dir('MSA-Kitcha-BE/Config-server') {
+                dir('MSA-Kitcha-BE') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/config:latest .
@@ -37,7 +37,7 @@ pipeline {
         
         stage('Build & Push Eureka') {
             steps {
-                dir('MSA-Kitcha-BE/eureka') {
+                dir('MSA-Kitcha-BE') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/eureka:latest .
@@ -51,7 +51,7 @@ pipeline {
 
         stage('Build & Push Gateway') {
             steps {
-                dir('MSA-Kitcha-BE/API-Gateway') {
+                dir('MSA-Kitcha-BE') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/gateway:latest .
