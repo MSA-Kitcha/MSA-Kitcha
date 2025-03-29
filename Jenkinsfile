@@ -68,6 +68,7 @@ pipeline {
                 dir('MSA-Kitcha-Authentication') {
                     script {
                         sh """
+                          pwd
                           docker build -t \${DOCKER_REPO}/auth:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/auth:latest
