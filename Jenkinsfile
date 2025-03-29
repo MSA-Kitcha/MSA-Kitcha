@@ -18,7 +18,7 @@ pipeline {
                 """
             }
         }
-
+/*
         stage('Build & Push Config') {
             steps {
                 dir('MSA-Kitcha-BE') {
@@ -62,7 +62,7 @@ pipeline {
                 }
             }
         }
-        
+    */
         stage('Build & Push Authentication') {
             steps {
                 dir('MSA-Kitcha-Authentication') {
