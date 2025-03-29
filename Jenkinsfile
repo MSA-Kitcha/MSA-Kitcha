@@ -13,9 +13,11 @@ pipeline {
             steps {
                 // 깃 레포(MSA-Kitcha) + 서브모듈 모두 체크아웃
                 checkout scm
-                sh """
-                  git submodule update --init --recursive
-                """
+                sh 'git submodule update --init --recursive'
+                sh 'echo "---- Submodules ----"'
+                sh 'git submodule status --recursive'
+                sh 'echo "---- MSA-Kitcha-Authentication contents ----"'
+                sh 'ls -al MSA-Kitcha-Authentication'
             }
         }
 /*
