@@ -24,7 +24,7 @@ pipeline {
                 dir('MSA-Kitcha-BE') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/config:latest .
+                          docker build -f Config-server/Dockerfile -t \${DOCKER_REPO}/config:latest .
                         """
                         sh """
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
@@ -40,7 +40,7 @@ pipeline {
                 dir('MSA-Kitcha-BE') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/eureka:latest .
+                          docker build -f eureka/Dockerfile -t \${DOCKER_REPO}/eureka:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/eureka:latest
                         """
@@ -54,7 +54,7 @@ pipeline {
                 dir('MSA-Kitcha-BE') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/gateway:latest .
+                          docker build -f API-Gateway/Dockerfile -t \${DOCKER_REPO}/gateway:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/gateway:latest
                         """
