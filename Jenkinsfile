@@ -67,7 +67,7 @@ pipeline {
     */
         stage('Build & Push Authentication') {
             steps {
-                dir('MSA-Kitcha-Authentication') {
+                dir('Kitcha-Authentication') {
                     script {
                         sh """
                           echo "📂 현재 디렉토리 위치:"
