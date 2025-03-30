@@ -36,13 +36,13 @@ pipeline {
                 }
             }
         }
- /*       
+        
         stage('Build & Push Eureka') {
             steps {
                 dir('Kitcha-BE') {
                     script {
                         sh """
-                          docker build -f eureka/Dockerfile -t \${DOCKER_REPO}/eureka:latest .
+                          docker buildx build --platform linux/amd64 -f eureka/Dockerfile -t \${DOCKER_REPO}/eureka:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/eureka:latest
                         """
@@ -56,7 +56,7 @@ pipeline {
                 dir('Kitcha-BE') {
                     script {
                         sh """
-                          docker build -f API-Gateway/Dockerfile -t \${DOCKER_REPO}/gateway:latest .
+                          docker buildx build --platform linux/amd64 -f API-Gateway/Dockerfile -t \${DOCKER_REPO}/gateway:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/gateway:latest
                         """
@@ -76,7 +76,7 @@ pipeline {
                           echo "📄 디렉토리 내 파일 목록:"
                           ls -al
                           
-                          docker build -t \${DOCKER_REPO}/auth:latest .
+                          docker buildx build --platform linux/amd64 -t \${DOCKER_REPO}/auth:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/auth:latest
                         """
@@ -90,7 +90,7 @@ pipeline {
                 dir('Kitcha-Board') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/board:latest .
+                          docker buildx build --platform linux/amd64 -t \${DOCKER_REPO}/board:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/board:latest
                         """
@@ -104,7 +104,7 @@ pipeline {
                 dir('Kitcha-Article') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/article:latest .
+                          docker buildx build --platform linux/amd64 -t \${DOCKER_REPO}/article:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/article:latest
                         """
@@ -118,7 +118,7 @@ pipeline {
                 dir('Kitcha-FE') {
                     script {
                         sh """
-                          docker build -t \${DOCKER_REPO}/frontend:latest .
+                          docker buildx build --platform linux/amd64 -t \${DOCKER_REPO}/frontend:latest .
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
                           docker push \${DOCKER_REPO}/frontend:latest
                         """
@@ -126,6 +126,6 @@ pipeline {
                 }
             }
         }
-        */
+        
     }
 }
