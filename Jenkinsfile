@@ -26,7 +26,7 @@ pipeline {
                 dir('Kitcha-BE') {
                     script {
                         sh """
-                          docker build -f Config-server/Dockerfile -t \${DOCKER_REPO}/config:latest .
+                          docker buildx build --platform linux/amd64 -f Config-server/Dockerfile -t \${DOCKER_REPO}/config:latest .
                         """
                         sh """
                           echo \${REGISTRY_CREDENTIALS_PSW} | docker login -u \${REGISTRY_CREDENTIALS_USR} --password-stdin
@@ -36,7 +36,7 @@ pipeline {
                 }
             }
         }
-        
+ /*       
         stage('Build & Push Eureka') {
             steps {
                 dir('Kitcha-BE') {
@@ -126,5 +126,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
