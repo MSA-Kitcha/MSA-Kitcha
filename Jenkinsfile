@@ -87,7 +87,7 @@ pipeline {
 
         stage('Build & Push Board') {
             steps {
-                dir('MSA-Kitcha-Board') {
+                dir('Kitcha-Board') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/board:latest .
@@ -101,7 +101,7 @@ pipeline {
         
         stage('Build & Push Article') {
             steps {
-                dir('MSA-Kitcha-Article') {
+                dir('Kitcha-Article') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/article:latest .
@@ -115,7 +115,7 @@ pipeline {
 
         stage('Build & Push FE') {
             steps {
-                dir('MSA-Kitcha-FE') {
+                dir('Kitcha-FE') {
                     script {
                         sh """
                           docker build -t \${DOCKER_REPO}/frontend:latest .
