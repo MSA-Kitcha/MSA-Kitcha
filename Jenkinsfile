@@ -20,10 +20,10 @@ pipeline {
                 sh 'ls -al MSA-Kitcha-Authentication'
             }
         }
-/*
+
         stage('Build & Push Config') {
             steps {
-                dir('MSA-Kitcha-BE') {
+                dir('Kitcha-BE') {
                     script {
                         sh """
                           docker build -f Config-server/Dockerfile -t \${DOCKER_REPO}/config:latest .
@@ -39,7 +39,7 @@ pipeline {
         
         stage('Build & Push Eureka') {
             steps {
-                dir('MSA-Kitcha-BE') {
+                dir('Kitcha-BE') {
                     script {
                         sh """
                           docker build -f eureka/Dockerfile -t \${DOCKER_REPO}/eureka:latest .
@@ -53,7 +53,7 @@ pipeline {
 
         stage('Build & Push Gateway') {
             steps {
-                dir('MSA-Kitcha-BE') {
+                dir('Kitcha-BE') {
                     script {
                         sh """
                           docker build -f API-Gateway/Dockerfile -t \${DOCKER_REPO}/gateway:latest .
@@ -64,7 +64,7 @@ pipeline {
                 }
             }
         }
-    */
+    
         stage('Build & Push Authentication') {
             steps {
                 dir('Kitcha-Authentication') {
