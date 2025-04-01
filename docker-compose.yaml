@@ -1,99 +1,9 @@
 services:
-#  mysql:
-#    image: mysql:8.0
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      MYSQL_DATABASE: ${MYSQL_DATABASE}
-#      MYSQL_USER: ${MYSQL_USER}
-#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#    container_name: mysql
-#    volumes:
-#      - mysql_data:/var/lib/mysql
-#      - /sys/fs/cgroup
-#    networks:
-#      - kitcha_network
-#    healthcheck:
-#      test: [ "CMD", "mysqladmin", "-u", "${MYSQL_USER}","-p${MYSQL_PASSWORD}", "ping", "-h", "localhost" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 3
-#    ports:
-#      - "3308:3306"
-#    restart: on-failure
-
-  config-server:
-    image: 99koo/config
-    build:
-#      context: ./Kitcha-BE
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
-      dockerfile: Config-server/Dockerfile
-    container_name: config-server
-    networks:
-      - kitcha_network
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8071/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    ports:
-      - "8071:8071"
-    expose:
-      - "8071"
-#    depends_on:
-#      mysql:
-#        condition: service_started
-    restart: on-failure
-
-  eureka:
-    image: 99koo/eureka
-    build:
-#      context: ./Kitcha-BE
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
-      dockerfile: eureka/Dockerfile
-    container_name: eureka
-    networks:
-      - kitcha_network
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    ports:
-      - "8761:8761"
-    depends_on:
-      config-server:
-        condition: service_healthy
-    restart: on-failure
-
-  gateway-server:
-    image: 99koo/gateway
-    build:
-#      context: ./Kitcha-BE
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-BE.git
-      dockerfile: API-Gateway/Dockerfile
-    environment:
-      TOKEN_SECRET: ${TOKEN_SECRET}
-      FRONTEND_SERVER: ${FRONTEND_SERVER}
-    container_name: gateway-server
-    networks:
-      - kitcha_network
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8072/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    ports:
-      - "8072:8072"
-    depends_on:
-      config-server:
-        condition: service_healthy
-    restart: on-failure
-
   auth:
-    image: 99koo/auth
-    build:
-#      context: ./Kitcha-Authentication
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-Authentication.git
+    #image: minjooong/msa-kitcha-auth
+    image: 502744150367.dkr.ecr.us-west-2.amazonaws.com/kitcha-registry:auth-latest
+    #build:
+    #  context: https://github.com/MSA-Kitcha/MSA-Kitcha-Authentication.git
     environment:
       MYSQL_DATABASE: ${MYSQL_USER_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -109,23 +19,16 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8091/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 3
-    expose:
-      - "8091"
-    depends_on:
-#      mysql:
-#        condition: service_healthy
-      eureka:
-        condition: service_healthy
-      gateway-server:
-        condition: service_healthy
+      retries: 5
+    ports:
+      - "8091:8091"
     restart: on-failure
 
   article:
-    image: 99koo/article
-    build:
-#      context: ./Kitcha-Article
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-Article.git
+    #image: minjooong/msa-kitcha-article
+    image: 502744150367.dkr.ecr.us-west-2.amazonaws.com/kitcha-registry:article-latest
+    #build:
+    #  context: https://github.com/MSA-Kitcha/MSA-Kitcha-Article.git
     environment:
       NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
       NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
@@ -133,22 +36,15 @@ services:
     container_name: article
     networks:
       - kitcha_network
-    expose:
-      - "8080"
-    depends_on:
-#      mysql:
-#        condition: service_healthy
-      eureka:
-        condition: service_healthy
-      gateway-server:
-        condition: service_healthy
+    ports:
+      - "8092:8080"
     restart: on-failure
 
   board:
-    image: 99koo/board
-    build:
-#      context: ./Kitcha-Board
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-Board.git
+    #image: minjooong/msa-kitcha-board
+    image: 502744150367.dkr.ecr.us-west-2.amazonaws.com/kitcha-registry:board-latest
+    #build:
+    #  context: https://github.com/MSA-Kitcha/MSA-Kitcha-Board.git
     environment:
       MYSQL_DATABASE: ${MYSQL_BOARD_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -156,30 +52,8 @@ services:
     container_name: board
     networks:
       - kitcha_network
-    expose:
-      - "8080"
-    depends_on:
-#      mysql:
-#        condition: service_healthy
-      eureka:
-        condition: service_healthy
-      gateway-server:
-        condition: service_healthy
-    restart: on-failure
-
-  frontend:
-    image: 99koo/frontend
-    build:
-#      context: ./Kitcha-FE
-      context: https://github.com/MSA-Kitcha/MSA-Kitcha-FE.git
-      args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
-    container_name: frontend
     ports:
-      - "3000:80"
-    depends_on:
-      auth:
-        condition: service_healthy
+      - "8093:8080"
     restart: on-failure
 
 volumes:
